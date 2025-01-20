@@ -172,61 +172,49 @@ class PayloadComposer extends PayloadAbstract {
     return token;
   }
 
-  signForegroundLink(onlyToken = true, callback) {
+  async signForegroundLink(onlyToken = true) {
     const baseUrl = this.getBaseUrl();
     const url = `${baseUrl.replace(/\/$/, "")}/transaction-payload`;
     const postData = {
-      partner: this.credentials.user,
-      token: this.generateToken(),
-      payload: Buffer.from(this.toJson()).toString('base64')
+        partner: this.credentials.user,
+        token: this.generateToken(),
+        payload: Buffer.from(this.toJson()).toString('base64')
     };
-  
-    axios.post(url, postData, { headers: { 'Content-Type': 'application/json' } })
-      .then(response => {
+
+    try {
+        const response = await axios.post(url, postData, { headers: { 'Content-Type': 'application/json' } });
         const responseData = response.data;
-  
+
         if (onlyToken && responseData.payloadCode) {
-          callback(null, responseData.payloadCode);
+            return responseData.payloadCode;  // Retorna diretamente o token
         } else if (!onlyToken && responseData.redirectTo) {
-          callback(null, responseData.redirectTo);
+            return responseData.redirectTo;  // Retorna o redirecionamento
         } else {
-          callback(new Error("Failed to generate token"));
+            throw new Error("Failed to generate token");
         }
-      })
-      .catch(error => {
-        callback(new Error(`API error: ${error.response ? `HTTP status code ${error.response.status}, response: ${error.response.data}` : error.message}`));
-      });
+    } catch (error) {
+        throw new Error(`API error: ${error.response ? `HTTP status code ${error.response.status}, response: ${error.response.data}` : error.message}`);
+    }
   }
   
-
-  signBackground(token, callback) {
+  async signBackground(token) {
     const [username, password] = token.split(":");
     const [bearerToken, providerId] = password.split("@");
     const baseUrl = this.getBaseUrl();
     const url = `${baseUrl.replace(/\/$/, "")}/sign`;
-  
-    axios.post(url, this.toJson(), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${bearerToken}`
-      }
-    })
-    .then(response => {
-      callback(null, response.data);
-    })
-    .catch(error => {
-      callback(new Error(`API error: ${error.response ? `HTTP status code ${error.response.status}, response: ${error.response.data}` : error.message}`));
-    });
-  }
 
-  /*
-    this.signBackground("username:password@providerId", (err, result) => {
-    if (err) {
-      console.error("Error:", err.message);
-      return;
+    try {
+        const response = await axios.post(url, this.toJson(), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${bearerToken}`
+            }
+        });
+        return response.data;  // Retorna diretamente a resposta
+    } catch (error) {
+        throw new Error(`API error: ${error.response ? `HTTP status code ${error.response.status}, response: ${error.response.data}` : error.message}`);
     }
-    console.log("Result:", result);
-  });*/
+  }
 }
 
 module.exports = PayloadComposer;

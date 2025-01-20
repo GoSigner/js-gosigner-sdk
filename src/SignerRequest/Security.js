@@ -166,7 +166,7 @@ class Security {
         };
 
         // Remove undefined properties
-        return Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined));
+        return Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined && v !== null));
     }
 }
 

@@ -11,6 +11,11 @@ const SHARED_KEY = "5daef7d64f955e1d3e61045001036d40"; // For testing only, prov
 let errorMessage = '';
 let errorTrace = '';
 
+let payloadData = '';
+let payloadToken = '';
+let apiToken = '';
+let apiUiLinkWithToken = '';
+
 try {
     // Initialize the payload composer
     const payloadComposer = new PayloadComposer();
@@ -22,7 +27,7 @@ try {
 
     // Set callback and webhook URLs
     //payloadComposer.setCallbackUrl("https://meulink.com.br?token=");
-    payloadComposer.setCallbackUrl("http://localhost:9000/response-sign.php?q=");
+    payloadComposer.setCallbackUrl("http://localhost:9000/response-sign?q=");
     payloadComposer.setWebhookUrl("https://webhook.site/38c373d8-92bc-41b3-9978-6c67aa89ad3b");
 
     // Configure UI settings
@@ -87,27 +92,11 @@ try {
     file2.setSignatureSetting(file2SignatureSettings);
     payloadComposer.addFile(file2);
 
-    // Generate payload data, token, and links
-    const payloadData = payloadComposer.toJson();
-    console.log("PayloadData: " + payloadData);
-    const payloadToken = payloadComposer.generateToken();
-    console.log("PayloadToken: " + payloadToken);
-
-    payloadComposer.signForegroundLink(true, (err, result) => {
-        if (err) {
-            console.error(err.message);
-            return;
-        }
-        console.log("ApiToken:", result);
-    });
-
-    payloadComposer.signForegroundLink(false, (err, result) => {
-        if (err) {
-            console.error(err.message);
-            return;
-        }
-        console.log("apiUiLinkWithToken:", result);
-    });
+    // Generate payload data and token
+    payloadData = payloadComposer.toJson();
+    payloadToken = payloadComposer.generateToken();
+    apiToken = payloadComposer.signForegroundLink(true);
+    apiUiLinkWithToken = payloadComposer.signForegroundLink(false);
 
 } catch (ex) {
     // Handle exceptions and log error details
@@ -115,3 +104,10 @@ try {
     errorTrace = ex.stack;
     console.error({ errorMessage, errorTrace });
 }
+
+module.exports = {
+    payloadData,
+    payloadToken,
+    apiToken,
+    apiUiLinkWithToken
+};
