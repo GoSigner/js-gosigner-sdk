@@ -32,8 +32,10 @@ try {
 
     // Configure UI settings
     const payloadUi = new Ui();
+    payloadUi.setButton("Abrir sessão");
     // payloadUi.setUsername("04660457192"); // CPF or CNPJ
     payloadUi.setColor("#FFFF00");
+    payloadUi.setBg("#f9f9f9");
     payloadUi.setScope("signature_session");
     payloadUi.setLifetime(60 * 60 * 24 * 7); // 7 days in seconds
     payloadUi.setPreferPreview("description");
