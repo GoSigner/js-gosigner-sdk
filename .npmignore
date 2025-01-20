@@ -1,0 +1,8 @@
+node_modules
+samples
+.git
+.github
+.vscode
+*.log
+Dockerfile
+docker-compose.yaml
