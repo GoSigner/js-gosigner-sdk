@@ -79,10 +79,11 @@ class File {
                     headers: {
                         'User-Agent': 'GoSignerFileDownloader/1.0'
                     },
-                    timeout: 5000
+                    timeout: 5000,
+                    responseType: 'arraybuffer' 
                 });
 
-                return response.data;
+                return Buffer.from(response.data);
             } catch (error) {
                 throw new Error('Failed to download file from URL');
             }

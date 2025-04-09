@@ -1,6 +1,7 @@
 class SignatureSetting {
     constructor() {
         this.type = null;
+        this.detached = null;
         this.visibleSignImg = null;
         this.visibleSignPage = null;
         this.visibleSignX = null;
@@ -63,6 +64,14 @@ class SignatureSetting {
             throw new Error(`Invalid signature policy: ${policy}`);
         }
         this.policy = policy;
+    }
+
+    getDetached() {
+        return $this.detached;
+    }
+
+    setDetached(detached){
+        this.detached = detached;
     }
 
     getVisibleSignImg() {
@@ -188,6 +197,7 @@ class SignatureSetting {
     toArray() {
         const properties = [
             'type',
+            'detached',
             'policy',
             'visibleSignImg',
             'visibleSignPage',
