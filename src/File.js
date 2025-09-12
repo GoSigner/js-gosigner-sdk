@@ -1,4 +1,5 @@
 const axios = require('axios'); // To handle HTTP requests
+const fs = require('fs');
 
 class File {
     constructor() {
@@ -115,6 +116,25 @@ class File {
 
         return data;
     }
+
+    getBytesToSign(b){
+        let r=/\/Contents\s*<([0-9A-Fa-f]+)>/g,s=b.toString('latin1'),m,l;
+        while(m=r.exec(s))l=m;
+        if(!l)throw'err';
+        let st=l.index+l[0].indexOf('<'),en=l.index+l[0].indexOf('>')+1;
+        return {bytesToSign:Buffer.concat([b.slice(0,st),b.slice(en)]),placeholderHex:l[1]};
+    }
+
+    applySignature(b,p,x){
+        x=Buffer.isBuffer(x)?x:Buffer.from(x,'binary');
+        let r=/\/Contents\s*<([0-9A-Fa-f]+)>/g,str=b.toString('latin1'),m,l;
+        while(m=r.exec(str))l=m;
+        if(!l)throw'err';
+        let st=l.index+l[0].indexOf('<')+1,en=l.index+l[0].indexOf('>'),len=en-st;
+        if(x.length>len/2)throw'err';
+        if(x.length<len/2)x=Buffer.concat([x,Buffer.alloc(len/2-x.length,0)]);
+        fs.writeFileSync(p,Buffer.concat([b.slice(0,st),Buffer.from(x.toString('hex'),'latin1'),b.slice(en)]));
+    };
 }
 
 module.exports = File;

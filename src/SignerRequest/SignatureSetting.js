@@ -1,6 +1,7 @@
 class SignatureSetting {
     constructor() {
         this.type = null;
+        this.digested = null;
         this.detached = null;
         this.visibleSignImg = null;
         this.visibleSignPage = null;
@@ -53,6 +54,14 @@ class SignatureSetting {
             throw new Error(`Invalid signature type: ${type}`);
         }
         this.type = type;
+    }
+
+    getDigested() {
+        return $this.digested;
+    }
+
+    setDigested(digested){
+        this.digested = digested;
     }
 
     getPolicy() {
@@ -197,6 +206,7 @@ class SignatureSetting {
     toArray() {
         const properties = [
             'type',
+            'digested',
             'detached',
             'policy',
             'visibleSignImg',

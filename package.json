@@ -11,7 +11,20 @@
     "start": "node ./samples/mini-http-handler-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["GoSigner", "SDK", "signatures", "digital-signature", "ICP Brasil", "ICPBR", "PKCS11", "PADES", "CADES", "XADES", "CRYPTOAPI", "HSM"],
+  "keywords": [
+    "GoSigner",
+    "SDK",
+    "signatures",
+    "digital-signature",
+    "ICP Brasil",
+    "ICPBR",
+    "PKCS11",
+    "PADES",
+    "CADES",
+    "XADES",
+    "CRYPTOAPI",
+    "HSM"
+  ],
   "author": "Paulo Filipe <paulo@gosigner.com.br",
   "license": "MIT",
   "dependencies": {
