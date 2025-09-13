@@ -1,6 +1,6 @@
 {
   "name": "js-gosigner-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SDK for GoSigner integration",
   "main": "index.js",
   "repository": {
@@ -25,7 +25,7 @@
     "CRYPTOAPI",
     "HSM"
   ],
-  "author": "Paulo Filipe <paulo@gosigner.com.br",
+  "author": "Paulo Filipe <paulo@gosigner.com.br>",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.0.0"
